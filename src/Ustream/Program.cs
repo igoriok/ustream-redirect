@@ -1,5 +1,4 @@
 ﻿using System;
-using Nancy;
 using Nancy.Hosting.Self;
 
 namespace Ustream
@@ -8,27 +7,33 @@ namespace Ustream
     {
         static void Main(string[] args)
         {
-            StaticConfiguration.DisableErrorTraces = false;
-
-            using (var host = new NancyHost(
-                new Bootstrapper(), 
-                new HostConfiguration
-                {
-                    AllowChunkedEncoding = false,
-                    UnhandledExceptionCallback = e => Console.WriteLine(e.ToString()),
-                    UrlReservations = new UrlReservations
-                    {
-                        CreateAutomatically = true
-                    }
-                },
-                new Uri("http://localhost:80/")))
+            try
             {
-                host.Start();
+                using (var host = new NancyHost(
+                    new Bootstrapper(),
+                    new HostConfiguration
+                    {
+                        AllowChunkedEncoding = false,
+                        UnhandledExceptionCallback = e => Console.WriteLine(e.ToString()),
+                        UrlReservations = new UrlReservations
+                        {
+                            CreateAutomatically = true
+                        }
+                    },
+                    new Uri("http://localhost:80/")))
+                {
+                    host.Start();
 
-                Console.WriteLine("Press any key to stop the server.");
+                    Console.WriteLine("Press any key to stop the server.");
+                    Console.ReadKey();
+
+                    host.Stop();
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
                 Console.ReadKey();
-
-                host.Stop();
             }
         }
     }

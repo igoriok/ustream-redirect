@@ -8,6 +8,7 @@ namespace Ustream
     {
         public Bootstrapper()
         {
+            StaticConfiguration.DisableErrorTraces = false;
             ResourceViewLocationProvider.RootNamespaces.Add(typeof(Bootstrapper).Assembly, "Ustream.Views");
         }
 
